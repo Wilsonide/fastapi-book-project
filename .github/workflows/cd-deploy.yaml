@@ -1,6 +1,6 @@
 name: CD Build and deploy app
 on: 
-  pull:
+  push:
     branches: ["main"]
 
 jobs:
