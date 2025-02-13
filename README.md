@@ -2,7 +2,8 @@
 
 ## Overview
 
-This project is a RESTful API built with FastAPI for managing a book collection. It provides comprehensive CRUD (Create, Read, Update, Delete) operations for books with proper error handling, input validation, and documentation.
+This project is a RESTful API built with FastAPI for managing a book collection. It provides comprehensive CRUD (Create, Read, Update, Delete) operations for books with proper error handling, input validation, and documentation,
+and also a ci/cd pipeline that deploys our api on aws server.
 
 ## Features
 
@@ -76,8 +77,8 @@ uvicorn main:app
 
 2. Access the API documentation:
 
-- Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
+- Swagger UI: <http://localhost:8000/docs>
+- ReDoc: <http://localhost:8000/redoc>
 
 ## API Endpoints
 
@@ -128,6 +129,52 @@ The API includes proper error handling for:
 - Invalid book IDs
 - Invalid genre types
 - Malformed requests
+
+## Deploying our Book API
+
+set up a linux server and configure it to enable nginx as web server and proxy for the api domain and then create a deploy pipeline that updates and deploy our api on every merged pull request to the main branch.
+
+### Setting up the CD Pipeline
+
+```bash
+on Linux
+mkdir -p .github/workflows/
+cd .github/workflows/
+touch cd.yaml   # cd.yaml is where we will put our deploy instructions.
+
+```
+
+inside the cd.yaml file
+
+```bash
+name: CD Build and deploy app
+on: 
+  push:
+    branches: ["main"]
+
+jobs:
+  
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: pulling git repo
+        uses: actions/checkout@v2
+
+      - name: Deploy to ubuntu server
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+
+          script: |
+            cd app/src
+            git pull
+            echo ${{secrets.SERVER_PASSWORD}} | sudo -S systemctl restart abudon-api
+          
+```
+
+Ensure your secrets are stored: Make sure SERVER_HOST, SERVER_USERNAME, SERVER_PASSWORD are added to your gitbub repository's environment secrets.
 
 ## Contributing
 
