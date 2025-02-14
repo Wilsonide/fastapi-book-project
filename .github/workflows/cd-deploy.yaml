@@ -40,7 +40,7 @@ jobs:
         with: 
           api_token: "${{ secrets.KOYEB_API_TOKEN }}"
 
-      - name: Deploy on Koyeb 
+      - name: Deploy to Koyeb
         uses: koyeb/action-git-deploy@v1
         with:
           app-name: fastapi-book-api
