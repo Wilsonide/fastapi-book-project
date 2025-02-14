@@ -48,7 +48,7 @@ jobs:
           service-instance-type: free
           service-type: web
           service-routes: /:8000
-          service-ports: 8000:http
+          service-ports: 80:http
           service-env: "PORT=8000"
           service-check: 8000:http:/monitoring/health
           docker: docker.io/wilsonide/fastapi-book-api:latest
