@@ -1,9 +1,11 @@
 name: Build and deploy app
+
 on:
   push:
     branches: ["main"]
+
 jobs:
-  
+
   deploy:
     runs-on: ubuntu-latest
     steps:
@@ -48,4 +50,5 @@ jobs:
           service-routes: /:8000
           service-ports: 8000:http
           service-env: "PORT=8000"
+          service-check: 8000:http:/monitoring/health
           docker: docker.io/wilsonide/fastapi-book-api:latest
